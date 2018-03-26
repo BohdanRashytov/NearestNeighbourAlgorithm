@@ -8,7 +8,7 @@ case class Point(x: Double, y: Double, color: Color)
 object NNA {
 
   val N = 1000
-  val M = 10000
+  val M = 1000
 
   val (mu, sigma) = (0.0, 1.5)
 
@@ -36,8 +36,9 @@ object NNA {
     Graph.paintLines(point, paintedLines)
 
     val successfulExperiments = pointsLive.count(p => experiment(p) == p.color)
-    println(K)
-    println(1.0 * successfulExperiments / pointsLive.size)
+    println(s"Sigma = $sigma")
+    println(s"K = $K")
+    println(s"Frequency of success = ${1.0 * successfulExperiments / pointsLive.size}")
 
   }
 
@@ -68,16 +69,16 @@ object NNA {
           freq3 = freq2
           k2 = (k1 + k3) / 2
           freq2 = optimalForK(k2)
-        case value if value == freq3 =>
-          k1 = k2
-          freq1 = freq2
-          k2 = (k1 + k3) / 2
-          freq2 = optimalForK(k2)
         case value if value == freq2 =>
           k1 = (k1 + k2) / 2
           k3 = (k3 + k2) / 2
           freq1 = optimalForK(k1)
           freq3 = optimalForK(k3)
+        case value if value == freq3 =>
+          k1 = k2
+          freq1 = freq2
+          k2 = (k1 + k3) / 2
+          freq2 = optimalForK(k2)
       }
     }
     k2
